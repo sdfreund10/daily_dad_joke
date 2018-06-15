@@ -1,0 +1,27 @@
+div.container-fluid
+  div.row.justify-content-center
+    h1.text-dark Start your morning off with a cringe-worthy dad joke!
+  div.row.justify-content-center
+    h2.text-secondary Sign up to recieve a new joke every morning.
+  div.row.justify-content-center
+    h3.text-secondary What’s the advantage of living in Switzerland? Well, the flag is a big plus.
+  div.row.justify-content-center
+    button.btn.btn-primary type="button" data-toggle="collapse" data-target="#new-user-form" aria-expanded="false" aria-controls="new-user-form"
+      | Sign Me Up!
+  div.row.justify-content-center
+    div.collapse#new-user-form
+      div.card.card-body
+        = form_for @new_user, url: users_path do |f|
+          div.form-group
+            = f.label :name
+            = f.text_field :name, class: "form-control"
+            small.form-text.text-muted What should we call you?
+          div.form-group
+            = f.label :email
+            = f.text_field :email, class: "form-control"
+            small.form-text.text-muted Used purely for opting out later
+          div.form-group
+            = f.label :phone_number
+            = f.text_field :phone_number, class: "form-control"
+            small.form-text.text-muted We will never share your email or phone number with anyone
+          = f.submit "Create", class: "btn btn-primary"
