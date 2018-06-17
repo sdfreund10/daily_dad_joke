@@ -9,15 +9,9 @@ end
 gem 'rails', '~> 5.1.6'
 gem 'pg'
 gem 'puma', '~> 3.7'
-gem 'sass-rails'
-gem 'sprockets-rails'
-gem 'bootstrap'
-gem 'jquery-rails'
+gem 'webpacker'
 gem 'autoprefixer-rails'
-gem 'uglifier', '>= 1.3.0'
 
-gem 'turbolinks', '~> 5'
-gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -26,6 +20,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'httparty'
 gem 'slim'
 gem 'twilio-ruby'
+gem 'bootswatch-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

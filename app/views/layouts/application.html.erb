@@ -3,17 +3,16 @@
   <head>
     <title>Daily Dad Joke</title>
     <%= csrf_meta_tags %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body class="bg-light">
+  <body>
+    <%= javascript_pack_tag 'application'%>
+    <%= stylesheet_pack_tag 'stylesheets'%>
+    <%= render "shared/nav" %>
     <% flash.each do |key, value| %>
       <div class="alert alert-<%= key %>"><%= value %></div>
     <% end %>
     <div class="main-content">
-      <%= render "shared/nav" %>
       <%= yield %>
     </div>
   </body>
