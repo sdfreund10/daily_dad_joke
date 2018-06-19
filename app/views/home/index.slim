@@ -7,19 +7,34 @@ div.container-fluid
     button.btn.btn-primary type="button" data-toggle="collapse" data-target="#new-user-form" aria-expanded="false" aria-controls="new-user-form"
       | Sign Me Up!
   div.row.justify-content-center
-    div.collapse#new-user-form
+    div.collapse#new-user-form.col-md-3
       div.card.card-body
-        = form_for @new_user, url: users_path do |f|
-          div.form-group
-            = f.label :name
-            = f.text_field :name, class: "form-control"
-            small.form-text.text-muted What should we call you?
-          div.form-group
-            = f.label :email
-            = f.text_field :email, class: "form-control"
-            small.form-text.text-muted Used purely for opting out later
-          div.form-group
-            = f.label :phone_number
-            = f.text_field :phone_number, class: "form-control"
-            small.form-text.text-muted We will never share your email or phone number with anyone
-          = f.submit "Create", class: "btn btn-primary"
+        div.form-group
+          form#user-signup
+            div.form-group
+              label Name
+              input.form-control type="text" name="user[name]"
+              small.text-danger#name-warning
+            div.form-group
+              label Email
+              input.form-control type="text" name="user[email]"
+              small.text-danger#email-warning
+            div.form-group
+              label Phone number
+              input.form-control type="tel" name="user[phone-number]"
+              small.text-danger#phone-warning
+            input.btn.btn-primary#submitButton type="submit" name="submitButton" value="Submit"
+        div.sk-fading-circle
+          div.sk-circle1.sk-circle
+          div.sk-circle2.sk-circle
+          div.sk-circle3.sk-circle
+          div.sk-circle4.sk-circle
+          div.sk-circle5.sk-circle
+          div.sk-circle6.sk-circle
+          div.sk-circle7.sk-circle
+          div.sk-circle8.sk-circle
+          div.sk-circle9.sk-circle
+          div.sk-circle10.sk-circle
+          div.sk-circle11.sk-circle
+          div.sk-circle12.sk-circle
+= javascript_pack_tag 'home'

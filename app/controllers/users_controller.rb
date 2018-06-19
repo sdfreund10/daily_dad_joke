@@ -1,13 +1,10 @@
 class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
-
     if @user.save
-      flash[:success] = "Successfully signed up! You should recieve your first joke shortly!"
-      redirect_to root_path
+      render json: @user, status: 200
     else
-      flash[:alert] = "There was an error signing up :/"
-      redirect_to root_path
+      render json: @user.errors.to_json, status: 422
     end
   end
 

@@ -38,11 +38,23 @@ class UserTest < ActiveSupport::TestCase
     assert_not too_few_characters.valid?
   end
 
-  test "it removes hyphens from user phone number" do
-    user = User.new(
+  test "it removes extra characters from user phone number" do
+    hyphens = User.new(
       valid_attributes.merge(phone_number: "555-123-4567")
     )
-    assert user.validate
-    assert(user.phone_number == "5551234567")
+    assert hyphens.validate
+    assert(hyphens.phone_number == "5551234567")
+
+    parens = User.new(
+      valid_attributes.merge(phone_number: "(555) 123-4567")
+    )
+    assert parens.validate
+    assert(parens.phone_number == "5551234567")
+
+    spaces = User.new(
+      valid_attributes.merge(phone_number: "(555) 123-4567")
+    )
+    assert spaces.validate
+    assert(spaces.phone_number == "5551234567")
   end
 end
