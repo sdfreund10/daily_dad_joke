@@ -3,6 +3,7 @@
   <head>
     <title>Daily Dad Joke</title>
     <%= csrf_meta_tags %>
+    <meta charset="UTF-8">
   </head>
 
   <body>
@@ -15,5 +16,6 @@
     <div class="main-content">
       <%= yield %>
     </div>
+    <%= render "shared/footer" %>
   </body>
 </html>
