@@ -11,6 +11,7 @@ gem 'pg'
 gem 'puma', '~> 3.7'
 gem 'webpacker'
 gem 'autoprefixer-rails'
+gem 'uglifier'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
