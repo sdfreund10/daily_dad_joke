@@ -1,24 +1,18 @@
-# README
+# Daily Dad Joke
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Do bad jokes make your day better? Why not start your day out with one? With DailyDadJoke, you will receive a text each morning with a new cringe-worthy dad joke.
 
-Things you may want to cover:
+Sign up and recieve your first joke tomorrow morning :)
 
-* Ruby version
+https://dailydadjoke.herokuapp.com
 
-* System dependencies
+## Support
 
-* Configuration
+Find a bug? Please create a [Github Issue](https://github.com/sdfreund10/daily_dad_joke/issues/new) (preferred) or email me and I'll do my best to fix it.
 
-* Database creation
+## Acknowledgments
+Jokes courtesy of [icanhazdadjoke](https://icanhazdadjoke.com) for the jokes
 
-* Database initialization
+CSS courtesy of [Bootstrap](https://getbootstrap.com)
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Color Theme courtesy of [Bootswatch](https://bootswatch.com)
