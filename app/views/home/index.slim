@@ -10,7 +10,13 @@ div.container-fluid
     div.collapse#new-user-form.col-md-3
       div.card.card-body
         div.form-group
+          div#success
+            svg.checkmark viewBox="0 0 52 52"
+              circle.checkmark-circle cx="26" cy="26" r="25" fill="none"
+              path.checkmark-check fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"
+            p Success! You should recieve your first dad joke tomorrow :)
           form#user-signup
+            small.text-danger#submission-warning
             div.form-group
               label Name
               input.form-control type="text" name="user[name]"
@@ -23,6 +29,7 @@ div.container-fluid
               label Phone number
               input.form-control type="tel" name="user[phone-number]"
               small.text-danger#phone-warning
+            = hidden_field_tag :authenticity_token, form_authenticity_token
             input.btn.btn-primary#submitButton type="submit" name="submitButton" value="Submit"
         div.sk-fading-circle
           div.sk-circle1.sk-circle

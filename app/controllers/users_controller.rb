@@ -1,10 +1,11 @@
 class UsersController < ApplicationController
   def create
+    sleep 1
     @user = User.new(user_params)
     if @user.save
       render json: @user, status: 200
     else
-      render json: @user.errors.to_json, status: 422
+      render json: @user.errors, status: 422
     end
   end
 
