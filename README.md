@@ -11,7 +11,7 @@ https://dailydadjoke.herokuapp.com
 Find a bug? Please create a [Github Issue](https://github.com/sdfreund10/daily_dad_joke/issues/new) (preferred) or email me and I'll do my best to fix it.
 
 ## Acknowledgments
-Jokes courtesy of [icanhazdadjoke](https://icanhazdadjoke.com) for the jokes
+Jokes courtesy of [icanhazdadjoke](https://icanhazdadjoke.com)
 
 CSS courtesy of [Bootstrap](https://getbootstrap.com)
 
