@@ -3,6 +3,7 @@ class User < ApplicationRecord
   validates_format_of :email, with: URI::MailTo::EMAIL_REGEXP
   validates_uniqueness_of :phone_number, scope: :email
   before_validation :reformat_phone_number
+  has_many :user_joke_histories, dependent: :delete_all
 
   private
 

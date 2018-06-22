@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180617160004) do
+ActiveRecord::Schema.define(version: 20180622210904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 20180617160004) do
     t.string "joke"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["api_id"], name: "index_jokes_on_api_id", unique: true
+  end
+
+  create_table "user_joke_histories", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "joke_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["joke_id"], name: "index_user_joke_histories_on_joke_id"
+    t.index ["user_id", "joke_id"], name: "index_user_joke_histories_on_user_id_and_joke_id", unique: true
+    t.index ["user_id"], name: "index_user_joke_histories_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
