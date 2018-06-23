@@ -54,4 +54,12 @@ config.webpacker.check_yarn_integrity = true
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Read the Twilio creds from the twilio.yml file
+  twilio_file = Rails.root.join('config', 'twilio.yml')
+  if File.exists?(twilio_file)
+    YAML.load_file(twilio_file).each do |key, value|
+      ENV[key] = value
+    end
+  end
 end
