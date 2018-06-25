@@ -22,6 +22,7 @@ gem 'httparty'
 gem 'slim'
 gem 'twilio-ruby'
 gem 'bootswatch-rails'
+gem 'whenever'
 
 group :production do
   gem "sentry-raven"
