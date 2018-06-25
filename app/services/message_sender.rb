@@ -26,7 +26,7 @@ class MessageSender
     users_to_exclude = UserJokeHistory.where(joke: joke).pluck(:user_id)
     User.where(id: @user_ids - users_to_exclude).each do |user|
       twilio_client.messages.create(
-        from: ENV["PHONE_NUMBER"],
+        from: ENV['PHONE_NUMBER'],
         to: user.formatted_phone_number,
         body: joke.joke
       )
@@ -35,16 +35,16 @@ class MessageSender
   end
 
   def set_joke
-    @joke = get_joke.yield_self do |joke|
+    @joke = request_joke.yield_self do |joke|
       Joke.upsert_from_api(joke)
     end
   end
 
-  def get_joke
-    uri = URI.parse("https://icanhazdadjoke.com/")
+  def request_joke
+    uri = URI.parse('https://icanhazdadjoke.com/')
     request = Net::HTTP::Get.new(uri)
-    request["Accept"] = "application/json"
-    request["User-Agent"] = "Daily Dad Joke (https://github.com/sdfreund10/daily_dad_joke)"
+    request['Accept'] = 'application/json'
+    request['User-Agent'] = 'Daily Dad Joke (https://github.com/sdfreund10/daily_dad_joke)'
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
       http.request(request)
@@ -54,7 +54,7 @@ class MessageSender
 
   def twilio_client
     @twilio_client ||= Twilio::REST::Client.new(
-      ENV["ACCOUNT_SID"], ENV["AUTH_TOKEN"]
+      ENV['ACCOUNT_SID'], ENV['AUTH_TOKEN']
     )
   end
 end

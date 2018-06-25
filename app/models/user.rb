@@ -13,6 +13,6 @@ class User < ApplicationRecord
 
   def reformat_phone_number
     return if phone_number.nil?
-    self.phone_number = phone_number.tr("() -", "")
+    self.phone_number = phone_number.tr('() -', '')
   end
 end
