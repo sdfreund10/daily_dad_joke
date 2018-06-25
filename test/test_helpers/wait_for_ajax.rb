@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Define method to wait for ajax to finish (in system tests)
 module WaitForAjax
   def wait_for_ajax
     Timeout.timeout(Capybara.default_max_wait_time) do

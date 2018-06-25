@@ -5,6 +5,10 @@ class User < ApplicationRecord
   before_validation :reformat_phone_number
   has_many :user_joke_histories, dependent: :delete_all
 
+  def formatted_phone_number
+    "+1#{phone_number}"
+  end
+
   private
 
   def reformat_phone_number
