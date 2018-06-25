@@ -22,6 +22,7 @@ gem 'httparty'
 gem 'slim'
 gem 'twilio-ruby'
 gem 'bootswatch-rails'
+gem 'whenever'
 
 group :production do
   gem "sentry-raven"
@@ -33,6 +34,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'pry'
   gem 'chromedriver-helper'
+  gem 'webmock'
 end
 
 group :development do
