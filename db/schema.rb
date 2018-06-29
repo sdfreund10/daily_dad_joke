@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180622210904) do
+ActiveRecord::Schema.define(version: 20180627024951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(version: 20180622210904) do
     t.string "phone_number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "time", default: "9:00", null: false
+    t.boolean "sunday", default: true, null: false
+    t.boolean "monday", default: true, null: false
+    t.boolean "tuesday", default: true, null: false
+    t.boolean "wednesday", default: true, null: false
+    t.boolean "thursday", default: true, null: false
+    t.boolean "friday", default: true, null: false
+    t.boolean "saturday", default: true, null: false
     t.index ["email", "phone_number"], name: "index_users_on_email_and_phone_number"
   end
 

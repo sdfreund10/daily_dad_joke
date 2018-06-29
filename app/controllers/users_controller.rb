@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   def create
-    sleep 1
     @user = User.new(user_params)
     if @user.save
       render json: @user, status: 200
@@ -12,6 +11,8 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :phone_number)
+    params.require(:user).permit(:name, :email, :phone_number, :sunday, :monday,
+                                 :tuesday, :wednesday, :thursday, :friday,
+                                 :saturday)
   end
 end
