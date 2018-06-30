@@ -38,9 +38,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 422
     body = JSON.parse(response.body)
-    assert_includes(
+    assert_equal(
       body,
-      { "phone_number"=>["is invalid"], "email"=>["is invalid"] }
+      body.merge({ "phone_number"=>["is invalid"], "email"=>["is invalid"] })
     )
   end
 end
