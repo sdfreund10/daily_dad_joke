@@ -23,7 +23,7 @@ addons:
     packages:
     - google-chrome-stable
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rails assets:precompile
   - bundle exec rails test:system test

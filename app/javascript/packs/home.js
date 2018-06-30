@@ -28,14 +28,7 @@ $(document).ready(function() {
 
   function submitData () {
     renderSpinner();
-    let postData = {
-      authenticity_token: $('#authenticity_token')[0].value,
-      user: {
-        name: $('input[name="user[name]"]')[0].value,
-        email: $('input[name="user[email]"]')[0].value,
-        phone_number: $('input[name="user[phone-number]"]')[0].value
-      }
-    };
+    let postData = formData();
     $.post('/users', postData).done(function (response) {
       console.log(response);
       $('.sk-fading-circle').fadeOut(function() {
@@ -46,6 +39,35 @@ $(document).ready(function() {
       handleSignupError(response.responseJSON)
       renderForm();
     });
+  }
+
+  function formData () {
+    return(
+      {
+        authenticity_token: $('#authenticity_token')[0].value,
+        user: {
+          name: $('input[name="user[name]"]')[0].value,
+          email: $('input[name="user[email]"]')[0].value,
+          phone_number: $('input[name="user[phone-number]"]')[0].value,
+          sunday: $('#sunday')[0].checked,
+          monday: $('#monday')[0].checked,
+          tuesday: $('#tuesday')[0].checked,
+          wednesday: $('#wednesday')[0].checked,
+          thursday: $('#thursday')[0].checked,
+          friday: $('#friday')[0].checked,
+          saturday: $('#saturday')[0].checked
+        }
+      }
+    )
+  }
+
+  function parseWeekdayValues () {
+    let data = {};
+    const elements = $("input[type='checkbox']");
+    for (element of elements) {
+      data[element.id] = element.checked
+    }
+    return(data)
   }
 
   function validateForm () {
@@ -82,7 +104,7 @@ $(document).ready(function() {
   }
 
   function handleSignupError (errors) {
-    if (errors.phone_number.includes('has already been taken')) {
+    if (errors.phone_number && errors.phone_number.includes('has already been taken')) {
       $('#submission-warning')[0].innerText = 'That phone number - email combination is already taken';
     }
   }

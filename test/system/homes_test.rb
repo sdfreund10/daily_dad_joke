@@ -4,9 +4,7 @@ class HomesTest < ApplicationSystemTestCase
   include WaitForAjax
   test 'vist homepage - toggle signup form' do
     visit root_url
-    # click sign up button
     click_button('Sign Me Up!')
-    # see form
     assert_selector(:css, '#user-signup')
   end
 
@@ -86,5 +84,44 @@ class HomesTest < ApplicationSystemTestCase
       find('#success').text,
       'Success! You should recieve your first dad joke tomorrow :)'
     )
+  end
+
+  test 'it has all days of the week rendered' do
+    visit root_url
+    click_button('Sign Me Up!')
+    assert_selector('.weekday-label', count: 7)
+    assert_equal(all('.weekday-label').map(&:text), %w(S M T W R F S))
+  end
+
+  test 'saturday and sunday are unselected by default' do
+    visit root_url
+    click_button('Sign Me Up!')
+    # assume moday is selected by default -- so its color should be different
+    monday_color = find("label[for='monday']").native.css_value('color')
+    assert_not_equal(
+      find("label[for='sunday']").native.css_value('color'),
+      monday_color
+    )
+    assert_not_equal(
+      find("label[for='saturday']").native.css_value('color'),
+      monday_color
+    )
+  end
+
+  test 'weekday labels change color when clicked' do
+    visit root_url
+    click_button('Sign Me Up!')
+    sunday = find("label[for='sunday']")
+    monday = find("label[for='monday']")
+    initial_sunday_color = sunday.native.css_value('color')
+    initial_monday_color = monday.native.css_value('color')
+    sunday.click
+    # sunday text color should change, monday should stay the same
+    assert_not_equal(sunday.native.css_value('color'), initial_sunday_color)
+    assert_equal(monday.native.css_value('color'), initial_monday_color)
+    sunday.click
+    # sunday text color should be initial color, monday should stay the same
+    assert_equal(sunday.native.css_value('color'), initial_sunday_color)
+    assert_equal(monday.native.css_value('color'), initial_monday_color)
   end
 end
