@@ -3,9 +3,9 @@ class User < ApplicationRecord
   validates_format_of :email, with: URI::MailTo::EMAIL_REGEXP
   validates_uniqueness_of :phone_number, scope: :email
   before_validation :reformat_phone_number
-  validates_presence_of %i(
+  validates_inclusion_of %i(
     monday tuesday wednesday thursday friday saturday sunday
-  )
+  ), in: [true, false]
   has_many :user_joke_histories, dependent: :delete_all
 
   def formatted_phone_number

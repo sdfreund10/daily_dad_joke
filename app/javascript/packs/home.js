@@ -98,7 +98,7 @@ $(document).ready(function() {
   }
 
   function handleSignupError (errors) {
-    if (errors.phone_number.includes('has already been taken')) {
+    if (errors.phone_number && errors.phone_number.includes('has already been taken')) {
       $('#submission-warning')[0].innerText = 'That phone number - email combination is already taken';
     }
   }
