@@ -4,6 +4,6 @@ namespace :message_sender do
     day = Date::DAYNAMES[Date.today.wday].downcase
     users = User.where(day => true).ids
     return "No users today" if users.empty?
-    MessageSender.new([user.id]).call
+    MessageSender.new(users).call
   end
 end
