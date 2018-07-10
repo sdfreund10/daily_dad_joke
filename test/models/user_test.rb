@@ -2,21 +2,12 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def valid_attributes
-    { email: 'test@example.com', phone_number: '5551234567', name: 'Test' }
+    { phone_number: '5551234567', name: 'Test' }
   end
 
   test 'saves user with valid attributes' do
     user = User.new(valid_attributes)
     assert(user.valid?)
-  end
-  test 'users do not save with invalid email' do
-    invlid_format = User.new(valid_attributes.merge(email: 'TEST'))
-    blank_email = User.new(valid_attributes.merge(email: ''))
-    nil_email = User.new(valid_attributes.merge(email: nil))
-
-    assert_not invlid_format.valid?
-    assert_not blank_email.valid?
-    assert_not nil_email.valid?
   end
 
   test 'users do not save with invalid phone number' do

@@ -36,7 +36,7 @@ class MessageSenderTest < ActiveSupport::TestCase
   end
 
   test 'requests new joke if user has recieved joke already' do
-    user = User.create(phone_number: '1234567890', email: 'example@test.com', name: 'Test')
+    user = User.create(phone_number: '1234567890', name: 'Test')
     joke = Joke.create!(api_id: JOKES[0][:id], joke: JOKES[0][:joke])
     UserJokeHistory.create!(joke: joke, user: user)
     stub_joke_api
@@ -52,7 +52,7 @@ class MessageSenderTest < ActiveSupport::TestCase
   end
 
   test 'send message to users who have not recieved joke' do
-    user = User.create(phone_number: '1234567890', email: 'example@test.com', name: 'Test')
+    user = User.create(phone_number: '1234567890', name: 'Test')
     stub_joke_api(return_joke_index: 0)
     MessageSender.new([user.id]).call
     assert_equal(TwilioClientStub.messages.length, 1)
@@ -64,8 +64,8 @@ class MessageSenderTest < ActiveSupport::TestCase
 
   test 'send same joke to multiple users if new joke' do
     users = [
-      User.create!(phone_number: '1234567890', email: 'example@test.com', name: 'Test'),
-      User.create!(phone_number: '1234567890', email: 'example2@test.com', name: 'Test')
+      User.create!(phone_number: '1234567890', name: 'Test'),
+      User.create!(phone_number: '0123456789', name: 'Test')
     ]
     stub_joke_api
     assert_changes -> { UserJokeHistory.count }, 2 do
@@ -81,8 +81,8 @@ class MessageSenderTest < ActiveSupport::TestCase
 
   test 'send different jokes to multiple users' do
     users = [
-      User.create!(phone_number: '1234567890', email: 'example@test.com', name: 'Test'),
-      User.create!(phone_number: '1234567890', email: 'example2@test.com', name: 'Test')
+      User.create!(phone_number: '1234567890', name: 'Test'),
+      User.create!(phone_number: '0123456789', name: 'Test')
     ]
     JOKES[0..1].each do |joke_params|
       joke = Joke.create!(api_id: joke_params[:id], joke: joke_params[:joke])
@@ -99,7 +99,7 @@ class MessageSenderTest < ActiveSupport::TestCase
   end
 
   test 'saves joke history' do
-    user = User.create(phone_number: '1234567890', email: 'example@test.com', name: 'Test')
+    user = User.create(phone_number: '1234567890', name: 'Test')
     stub_joke_api
     assert_changes -> { UserJokeHistory.count }, 1 do
       MessageSender.new([user.id]).call

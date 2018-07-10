@@ -4,7 +4,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'create saves user with valid params' do
     params = {
       'name' => 'Test',
-      'email' => 'test@example.com',
       'phone_number' => '0123456789',
       'sunday' => true,
       'monday' => true,
@@ -22,7 +21,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'create returns 422 w/ errors for invalid params' do
     params = {
       'name' => nil,
-      'email' => nil,
       'phone_number' => nil,
       'sunday' => true,
       'monday' => true,
@@ -40,7 +38,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(response.body)
     assert_equal(
       body,
-      body.merge({ "phone_number"=>["is invalid"], "email"=>["is invalid"] })
+      body.merge({ "phone_number"=>["is invalid"] })
     )
   end
 end

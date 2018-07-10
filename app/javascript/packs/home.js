@@ -20,7 +20,6 @@ $(document).ready(function() {
 
   function renderForm() {
     $('#name-warning')[0].innerText = '';
-    $('#email-warning')[0].innerText = '';
     $('#phone-warning')[0].innerText = '';
     $('.sk-fading-circle').hide();
     $('#user-signup').show();
@@ -47,7 +46,6 @@ $(document).ready(function() {
         authenticity_token: $('#authenticity_token')[0].value,
         user: {
           name: $('input[name="user[name]"]')[0].value,
-          email: $('input[name="user[email]"]')[0].value,
           phone_number: $('input[name="user[phone-number]"]')[0].value,
           sunday: $('#sunday')[0].checked,
           monday: $('#monday')[0].checked,
@@ -77,11 +75,6 @@ $(document).ready(function() {
       valid = false;
     }
 
-    if (!validEmail()) {
-      $('#email-warning')[0].innerText = 'Please enter a valid email';
-      valid = false;
-    }
-
     if (!validPhone()) {
       $('#phone-warning')[0].innerText = 'Please enter a valid phone number';
       valid = false;
@@ -93,11 +86,6 @@ $(document).ready(function() {
     return $('input[name="user[name]"]')[0].value !== ''
   }
 
-  function validEmail () {
-    const emailRegex = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
-    return $('input[name="user[email]"]')[0].value.match(emailRegex);
-  }
-
   function validPhone () {
     const phoneRegex = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
     return $('input[name="user[phone-number]"]')[0].value.match(phoneRegex);
@@ -105,7 +93,7 @@ $(document).ready(function() {
 
   function handleSignupError (errors) {
     if (errors.phone_number && errors.phone_number.includes('has already been taken')) {
-      $('#submission-warning')[0].innerText = 'That phone number - email combination is already taken';
+      $('#submission-warning')[0].innerText = 'That phone number is already taken';
     }
   }
 });

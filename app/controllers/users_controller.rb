@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :phone_number, :sunday, :monday,
+    params.require(:user).permit(:name, :phone_number, :sunday, :monday,
                                  :tuesday, :wednesday, :thursday, :friday,
                                  :saturday)
   end

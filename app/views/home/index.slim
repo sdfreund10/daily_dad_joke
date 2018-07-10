@@ -3,69 +3,71 @@ div.container-fluid
     h1 Start your morning off with a cringe-worthy dad joke!
   div.row.justify-content-center
     h2 Sign up to recieve a new joke every morning.
-  div.row.justify-content-center
-    button.btn.btn-primary type="button" data-toggle="collapse" data-target="#new-user-form" aria-expanded="false" aria-controls="new-user-form"
-      | Sign Me Up!
-  div.row.justify-content-center
-    div.collapse#new-user-form.col-md-3
-      div.card.card-body
-        div.form-group
-          div#success
-            svg.checkmark viewBox="0 0 52 52"
-              circle.checkmark-circle cx="26" cy="26" r="25" fill="none"
-              path.checkmark-check fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"
-            p Success! You should recieve your first dad joke tomorrow :)
-          form#user-signup
-            small.text-danger#submission-warning
-            div.form-group
-              label Name
-              input.form-control type="text" name="user[name]"
-              small.text-danger#name-warning
-            div.form-group
-              label Email
-              input.form-control type="text" name="user[email]"
-              small.text-danger#email-warning
-            div.form-group
-              label Phone number
-              input.form-control type="tel" name="user[phone-number]"
-              small.text-danger#phone-warning
-            = hidden_field_tag :authenticity_token, form_authenticity_token
-            div.form-group.justify-content-center
-              label On what days should we send your joke?
-              div.row.form-checkform-check-inline
-                div.col-md-1.offset-md-1
-                  input#sunday type="checkbox" name="user[sunday]"
-                    label.weekday-label for="sunday" S
-                div.col-md-1
-                  input#monday type="checkbox" name="user[monday]" checked="true"
-                    label.weekday-label for="monday" M
-                div.col-md-1
-                  input#tuesday type="checkbox" name="user[tuesday]" checked="true"
-                    label.weekday-label for="tuesday" T
-                div.col-md-1
-                  input#wednesday type="checkbox" name="user[wednesday]" checked="true"
-                    label.weekday-label for="wednesday" W
-                div.col-md-1
-                  input#thursday type="checkbox" name="user[thursday]" checked="true"
-                    label.weekday-label for="thursday" R
-                div.col-md-1
-                  input#friday type="checkbox" name="user[friday]" checked="true"
-                    label.weekday-label for="friday" F
-                div.col-md-1
-                  input#saturday type="checkbox" name="user[saturday]"
-                    label.weekday-label for="saturday" S
-            input.btn.btn-primary#submitButton type="submit" name="submitButton" value="Submit"
-        div.sk-fading-circle
-          div.sk-circle1.sk-circle
-          div.sk-circle2.sk-circle
-          div.sk-circle3.sk-circle
-          div.sk-circle4.sk-circle
-          div.sk-circle5.sk-circle
-          div.sk-circle6.sk-circle
-          div.sk-circle7.sk-circle
-          div.sk-circle8.sk-circle
-          div.sk-circle9.sk-circle
-          div.sk-circle10.sk-circle
-          div.sk-circle11.sk-circle
-          div.sk-circle12.sk-circle
+  div.row
+    div.col-sm-4.offset-sm-4
+      ul.nav.nav-pills.mb-3#pills-tab role="tablist"
+        li.nav-item
+          a.nav-link.active#pills-home-tab data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true" Sign Up!
+        li.nav-item
+          a.nav-link.pills-profile-tab data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false" Manage User
+      div.tab-content#pills-tabContent
+        div.tab-pane.fade.show.active#pills-home role="tabpanel" aria-labelledby="pills-home-tab"
+          div.form-group
+            div#success
+              svg.checkmark viewBox="0 0 52 52"
+                circle.checkmark-circle cx="26" cy="26" r="25" fill="none"
+                path.checkmark-check fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"
+              p Success! You should recieve your first dad joke tomorrow :)
+            form#user-signup
+              small.text-danger#submission-warning
+              div.form-group
+                label Username
+                input.form-control type="text" name="user[name]"
+                small.text-danger#name-warning
+              div.form-group
+                label Phone number
+                input.form-control type="tel" name="user[phone-number]"
+                small.text-danger#phone-warning
+              = hidden_field_tag :authenticity_token, form_authenticity_token
+              div.form-group.justify-content-center
+                label On what days should we send your joke?
+                div.row.form-checkform-check-inline
+                  div.col-sm-1.offset-sm-1
+                    input#sunday type="checkbox" name="user[sunday]"
+                      label.weekday-label for="sunday" S
+                  div.col-sm-1
+                    input#monday type="checkbox" name="user[monday]" checked="true"
+                      label.weekday-label for="monday" M
+                  div.col-sm-1
+                    input#tuesday type="checkbox" name="user[tuesday]" checked="true"
+                      label.weekday-label for="tuesday" T
+                  div.col-sm-1
+                    input#wednesday type="checkbox" name="user[wednesday]" checked="true"
+                      label.weekday-label for="wednesday" W
+                  div.col-sm-1
+                    input#thursday type="checkbox" name="user[thursday]" checked="true"
+                      label.weekday-label for="thursday" R
+                  div.col-sm-1
+                    input#friday type="checkbox" name="user[friday]" checked="true"
+                      label.weekday-label for="friday" F
+                  div.col-sm-1
+                    input#saturday type="checkbox" name="user[saturday]"
+                      label.weekday-label for="saturday" S
+              div.row.justify-content-center
+                input.btn.btn-primary#submitButton type="submit" name="submitButton" value="Submit"
+          div.sk-fading-circle
+            div.sk-circle1.sk-circle
+            div.sk-circle2.sk-circle
+            div.sk-circle3.sk-circle
+            div.sk-circle4.sk-circle
+            div.sk-circle5.sk-circle
+            div.sk-circle6.sk-circle
+            div.sk-circle7.sk-circle
+            div.sk-circle8.sk-circle
+            div.sk-circle9.sk-circle
+            div.sk-circle10.sk-circle
+            div.sk-circle11.sk-circle
+            div.sk-circle12.sk-circle
+        div.tab-pane.fade#pills-profile role="tabpanel" aria-labelledby="pills-profile-tab" Manage User
+
 = javascript_pack_tag 'home'
