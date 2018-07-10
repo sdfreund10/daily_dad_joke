@@ -1,7 +1,3 @@
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
-
 $(document).ready(function() {
   $('#user-signup').submit(function(event) {
     event.preventDefault();

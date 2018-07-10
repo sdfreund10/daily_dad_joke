@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  setup do
+    TwilioClientStub.messages.clear
+  end
+
   def valid_attributes
     { phone_number: '5551234567', name: 'Test' }
   end
@@ -47,5 +51,20 @@ class UserTest < ActiveSupport::TestCase
     )
     assert spaces.validate
     assert(spaces.phone_number == '5551234567')
+  end
+
+  test 'sends confirmation text after user creation' do
+    user = User.new(valid_attributes)
+    user.save!
+
+    messages = TwilioClientStub.messages
+    assert_equal(messages.length, 1)
+    assert_equal(
+      messages.first.body,
+      "Thanks for signing up for Daily Dad Joke. "\
+      "You should recieve your first message on the next weekday "\
+      "specified during signup :)"
+    )
+    assert_equal(messages.first.to, user.formatted_phone_number)
   end
 end
