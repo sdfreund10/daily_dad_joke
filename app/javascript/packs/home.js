@@ -5,10 +5,17 @@ window.$ = $;
 $(document).ready(function() {
   let userName;
   let userPhoneNumber;
-  $('#user-signup').submit(function(event) {
+  $('#user-signup').submit((event) => {
     event.preventDefault();
     if (validateForm()) {
-      submitData();
+      submitSignUpData();
+    }
+  });
+
+  $('#user-signin').submit((event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      submitSignInData();
     }
   });
 
@@ -27,22 +34,20 @@ $(document).ready(function() {
     $('#user-signup').show();
   }
 
-  function submitData () {
+  function submitSignUpData () {
     renderSpinner();
-    let postData = signInFormData();
+    let postData = signUpFormData();
     $.post('/users', postData).done(function (response) {
-      console.log(response);
       $('.sk-fading-circle').fadeOut(function() {
         $('#success').show();
       });
     }).fail(function (response) {
-      console.log(response);
       handleSignupError(response.responseJSON)
       renderForm();
     });
   }
 
-  function signInFormData () {
+  function signUpFormData () {
     return(
       {
         authenticity_token: $('#authenticity_token')[0].value,
@@ -56,6 +61,22 @@ $(document).ready(function() {
           thursday: $('form#user-signup #thursday')[0].checked,
           friday: $('form#user-signup #friday')[0].checked,
           saturday: $('form#user-signup #saturday')[0].checked
+        }
+      }
+    )
+  }
+
+  function submitSignInData () {
+
+  }
+
+  function signInFormData () {
+    return(
+      {
+        authenticity_token: $('#authenticity_token')[0].value,
+        user: {
+          name: $('form#user-signin input[name="user[name]"]')[0].value,
+          phone_number: $('form#user-signin input[name="user[phone-number]"]')[0].value
         }
       }
     )

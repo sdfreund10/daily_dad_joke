@@ -5,6 +5,8 @@ class HomesTest < ApplicationSystemTestCase
   test 'sign up form rendered on page load' do
     visit root_url
     assert_selector(:css, '#user-signup')
+    assert_selector(:xpath, "//input[@name='user[name]']")
+    assert_selector(:xpath, "//input[@name='user[phone-number]']")
   end
 
   test 'submit with blank name' do
@@ -95,5 +97,12 @@ class HomesTest < ApplicationSystemTestCase
     # sunday text color should be initial color, monday should stay the same
     assert_equal(sunday.native.css_value('color'), initial_sunday_color)
     assert_equal(monday.native.css_value('color'), initial_monday_color)
+  end
+
+  test 'render sign in form when visiting manage user tab' do
+    visit root_url
+    click_link('Manage User')
+    assert_selector(:xpath, "//input[@name='user[name]']")
+    assert_selector(:xpath, "//input[@name='user[phone-number]']")
   end
 end
