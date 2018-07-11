@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
@@ -38,7 +40,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     body = JSON.parse(response.body)
     assert_equal(
       body,
-      body.merge({ "phone_number"=>["is invalid"] })
+      body.merge('phone_number' => ['is invalid'])
     )
   end
 end

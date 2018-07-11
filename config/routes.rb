@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root to: "home#index"
   resources :users, only: %i(create)
   resources :error, only: [:index]
+  resources :user_sign_in, only: [:create]
 end

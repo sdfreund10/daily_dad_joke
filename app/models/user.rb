@@ -22,14 +22,16 @@ class User < ApplicationRecord
   end
 
   def send_confirmation
-    Twilio::REST::Client.new(
-      ENV['ACCOUNT_SID'], ENV['AUTH_TOKEN']
-    ).messages.create(
-      from: ENV['PHONE_NUMBER'],
-      to: formatted_phone_number,
-      body: "Thanks for signing up for Daily Dad Joke. "\
-            "You should recieve your first message on the next weekday "\
-            "specified during signup :)"
-    )
+    unless ENV['RAILS_ENV'] == 'development'
+      Twilio::REST::Client.new(
+        ENV['ACCOUNT_SID'], ENV['AUTH_TOKEN']
+      ).messages.create(
+        from: ENV['PHONE_NUMBER'],
+        to: formatted_phone_number,
+        body: "Thanks for signing up for Daily Dad Joke. "\
+              "You should recieve your first message on the next weekday "\
+              "specified during signup :)"
+      )
+    end
   end
 end
