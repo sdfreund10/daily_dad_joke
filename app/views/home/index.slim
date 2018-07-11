@@ -7,11 +7,11 @@ div.container-fluid
     div.col-sm-4.offset-sm-4
       ul.nav.nav-pills.mb-3#pills-tab role="tablist"
         li.nav-item
-          a.nav-link.active#pills-home-tab data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true" Sign Up!
+          a.nav-link.active#sign-up-tab data-toggle="pill" href="#sign-up" role="tab" aria-controls="sign-up" aria-selected="true" Sign Up!
         li.nav-item
-          a.nav-link.pills-profile-tab data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false" Manage User
+          a.nav-link.pills-manage-user-tab data-toggle="pill" href="#pills-manage-user" role="tab" aria-controls="pills-manage-user" aria-selected="false" Manage User
       div.tab-content#pills-tabContent
-        div.tab-pane.fade.show.active#pills-home role="tabpanel" aria-labelledby="pills-home-tab"
+        div.tab-pane.fade.show.active#sign-up role="tabpanel" aria-labelledby="sign-up-tab"
           div.form-group
             div#success
               svg.checkmark viewBox="0 0 52 52"
@@ -54,7 +54,7 @@ div.container-fluid
                     input#saturday type="checkbox" name="user[saturday]"
                       label.weekday-label for="saturday" S
               div.row.justify-content-center
-                input.btn.btn-primary#submitButton type="submit" name="submitButton" value="Submit"
+                input.btn.btn-primary type="submit" name="signUpButton" value="Submit"
           div.sk-fading-circle
             div.sk-circle1.sk-circle
             div.sk-circle2.sk-circle
@@ -68,6 +68,18 @@ div.container-fluid
             div.sk-circle10.sk-circle
             div.sk-circle11.sk-circle
             div.sk-circle12.sk-circle
-        div.tab-pane.fade#pills-profile role="tabpanel" aria-labelledby="pills-profile-tab" Manage User
+        div.tab-pane.fade#pills-manage-user role="tabpanel" aria-labelledby="pills-manage-user-tab"
+          div.justify-content-center#sign-in
+            h3.text-center Please sign in
+            div.form-group
+              form#user-signin
+                div.form-group
+                  label Username
+                  input.form-control type="text" name="user[name]"
+                div.form-group
+                  label Phone number
+                  input.form-control type="tel" name="user[phone-number]"
+                div.row.justify-content-center
+                  input.btn.btn-primary#signInButton type="submit" name="signInButton" value="Sign In"
 
 = javascript_pack_tag 'home'

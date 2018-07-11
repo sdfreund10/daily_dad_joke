@@ -1,4 +1,10 @@
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
+
 $(document).ready(function() {
+  let userName;
+  let userPhoneNumber;
   $('#user-signup').submit(function(event) {
     event.preventDefault();
     if (validateForm()) {
@@ -23,7 +29,7 @@ $(document).ready(function() {
 
   function submitData () {
     renderSpinner();
-    let postData = formData();
+    let postData = signInFormData();
     $.post('/users', postData).done(function (response) {
       console.log(response);
       $('.sk-fading-circle').fadeOut(function() {
@@ -36,20 +42,20 @@ $(document).ready(function() {
     });
   }
 
-  function formData () {
+  function signInFormData () {
     return(
       {
         authenticity_token: $('#authenticity_token')[0].value,
         user: {
-          name: $('input[name="user[name]"]')[0].value,
-          phone_number: $('input[name="user[phone-number]"]')[0].value,
-          sunday: $('#sunday')[0].checked,
-          monday: $('#monday')[0].checked,
-          tuesday: $('#tuesday')[0].checked,
-          wednesday: $('#wednesday')[0].checked,
-          thursday: $('#thursday')[0].checked,
-          friday: $('#friday')[0].checked,
-          saturday: $('#saturday')[0].checked
+          name: $('form#user-signup input[name="user[name]"]')[0].value,
+          phone_number: $('form#user-signup input[name="user[phone-number]"]')[0].value,
+          sunday: $('form#user-signup #sunday')[0].checked,
+          monday: $('form#user-signup #monday')[0].checked,
+          tuesday: $('form#user-signup #tuesday')[0].checked,
+          wednesday: $('form#user-signup #wednesday')[0].checked,
+          thursday: $('form#user-signup #thursday')[0].checked,
+          friday: $('form#user-signup #friday')[0].checked,
+          saturday: $('form#user-signup #saturday')[0].checked
         }
       }
     )
