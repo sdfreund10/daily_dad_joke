@@ -22,29 +22,17 @@ div.container-fluid
               small.text-danger#submission-warning
               div.form-group
                 label Username
-                input.form-control type="text" name="user[name]"
+                input.form-control type="text" name="user[name]" placeholder="username"
                 small.text-danger#name-warning
               div.form-group
                 label Phone number
-                input.form-control type="tel" name="user[phone-number]"
+                input.form-control type="tel" name="user[phone-number]" placeholder="1234567890"
                 small.text-danger#phone-warning
               = hidden_field_tag :authenticity_token, form_authenticity_token
               = render partial: "weekday_form"
               div.row.justify-content-center
                 input.btn.btn-primary type="submit" name="signUpButton" value="Submit"
-          div.sk-fading-circle
-            div.sk-circle1.sk-circle
-            div.sk-circle2.sk-circle
-            div.sk-circle3.sk-circle
-            div.sk-circle4.sk-circle
-            div.sk-circle5.sk-circle
-            div.sk-circle6.sk-circle
-            div.sk-circle7.sk-circle
-            div.sk-circle8.sk-circle
-            div.sk-circle9.sk-circle
-            div.sk-circle10.sk-circle
-            div.sk-circle11.sk-circle
-            div.sk-circle12.sk-circle
+          = render partial: "loading_spinner"
         div.tab-pane.fade#pills-manage-user role="tabpanel" aria-labelledby="pills-manage-user-tab"
           div.justify-content-center#sign-in
             h3.text-center Please sign in
@@ -52,13 +40,16 @@ div.container-fluid
               form#user-signin
                 div.form-group
                   label Username
-                  input.form-control type="text" name="user[name]"
+                  input.form-control type="text" name="user[name]" placeholder="username"
+                  small.text-danger#name-warning
                 div.form-group
                   label Phone number
-                  input.form-control type="tel" name="user[phone-number]"
+                  input.form-control type="tel" name="user[phone-number]" placeholder="1234567890"
+                  small.text-danger#phone-warning
                 = hidden_field_tag :authenticity_token, form_authenticity_token
+                small.text-danger#sign-in-warning
                 div.row.justify-content-center
-                  input.btn.btn-primary#signInButton type="submit" name="signInButton" value="Sign In"
+                  input.btn.btn-primary type="submit" name="signInButton" value="Sign In"
           / div.justify-content-center#sign-in
           /   h3.text-center Modify User Settings
           /   div.form-group

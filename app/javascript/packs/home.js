@@ -6,15 +6,16 @@ $(document).ready(function() {
   let userName;
   let userPhoneNumber;
   $('#user-signup').submit((event) => {
+    $('small.text-danger').text('');
     event.preventDefault();
-    if (validateForm()) {
+    if (validateForm('#user-signup')) {
       submitSignUpData();
     }
   });
 
   $('#user-signin').submit((event) => {
     event.preventDefault();
-    if (validateForm()) {
+    if (validateForm('#user-signin')) {
       submitSignInData();
     }
   });
@@ -28,8 +29,6 @@ $(document).ready(function() {
   }
 
   function renderForm() {
-    $('#name-warning')[0].innerText = '';
-    $('#phone-warning')[0].innerText = '';
     $('.sk-fading-circle').hide();
     $('#user-signup').show();
   }
@@ -67,20 +66,20 @@ $(document).ready(function() {
   }
 
   function submitSignInData () {
-
-  }
-
-  function signInFormData () {
-    return(
-      {
-        authenticity_token: $('#authenticity_token')[0].value,
-        user: {
-          name: $('form#user-signin input[name="user[name]"]')[0].value,
-          phone_number: $('form#user-signin input[name="user[phone-number]"]')[0].value
-        }
+    let signInData = {
+      authenticity_token: $('#authenticity_token')[0].value,
+      user: {
+        name: $('form#user-signin input[name="user[name]"]')[0].value,
+        phone_number: $('form#user-signin input[name="user[phone-number]"]')[0].value
       }
-    )
+    };
+    $.post('/user_sign_in', signInData).done(function (response){
+      console.log(response)
+    }).fail(function (response) {
+      $('#sign-in-warning')[0].innerText = 'The information provided does not match any accounts';
+    });
   }
+
 
   function parseWeekdayValues () {
     let data = {};
@@ -91,27 +90,27 @@ $(document).ready(function() {
     return(data)
   }
 
-  function validateForm () {
+  function validateForm (formSelector) {
     let valid = true;
-    if (!validName()) {
-      $('#name-warning')[0].innerText = 'Please enter a name';
+    if (!validName(formSelector)) {
+      $(`${formSelector} small#name-warning`)[0].innerText = 'Please enter your username';
       valid = false;
     }
 
-    if (!validPhone()) {
-      $('#phone-warning')[0].innerText = 'Please enter a valid phone number';
+    if (!validPhone(formSelector)) {
+      $(`${formSelector} small#phone-warning`)[0].innerText = 'Please enter a valid phone number';
       valid = false;
     }
     return valid;
   }
 
-  function validName () {
-    return $('input[name="user[name]"]')[0].value !== ''
+  function validName (formSelector) {
+    return $(`${formSelector} input[name="user[name]"]`)[0].value !== ''
   }
 
-  function validPhone () {
+  function validPhone (formSelector) {
     const phoneRegex = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
-    return $('input[name="user[phone-number]"]')[0].value.match(phoneRegex);
+    return $(`${formSelector} input[name="user[phone-number]"]`)[0].value.match(phoneRegex);
   }
 
   function handleSignupError (errors) {

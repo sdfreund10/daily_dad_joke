@@ -12,7 +12,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'submit with blank name' do
     visit root_url
     click_button('Submit')
-    assert_equal(find('#name-warning').text, 'Please enter a name')
+    assert_equal(find('#name-warning').text, 'Please enter your username')
   end
 
   test 'submit with blank phone number' do
@@ -104,5 +104,39 @@ class HomesTest < ApplicationSystemTestCase
     click_link('Manage User')
     assert_selector(:xpath, "//input[@name='user[name]']")
     assert_selector(:xpath, "//input[@name='user[phone-number]']")
+  end
+
+  test 'validates phone number before submission' do
+    visit root_url
+    click_link('Manage User')
+    fill_in('user[name]', with: 'Test')
+    # submit with blank phone
+    click_button('Sign In')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+
+    # invalid phone number format
+    fill_in('user[phone-number]', with: '12345')
+    click_button('Sign In')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+  end
+
+  test 'validates username before submission' do
+    visit root_url
+    click_link('Manage User')
+    fill_in('user[name]', with: 'Test')
+    click_button('Sign In')
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+  end
+
+  test 'renders sign in error if no user found' do
+    visit root_url
+    click_link('Manage User')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '0000000000')
+    click_button('Sign In')
+    assert_equal(
+      find('#sign-in-warning').text,
+      'The information provided does not match any accounts'
+    )
   end
 end
