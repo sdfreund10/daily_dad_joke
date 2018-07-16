@@ -123,7 +123,6 @@ class HomesTest < ApplicationSystemTestCase
   test 'validates username before submission' do
     visit root_url
     click_link('Manage User')
-    fill_in('user[name]', with: 'Test')
     click_button('Sign In')
     assert_equal(find('#name-warning').text, 'Please enter your username')
   end
@@ -131,12 +130,69 @@ class HomesTest < ApplicationSystemTestCase
   test 'renders sign in error if no user found' do
     visit root_url
     click_link('Manage User')
+    # wait for form to render to avoid race condition
+    assert_selector('#user-signin')
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '0000000000')
     click_button('Sign In')
     assert_equal(
       find('#sign-in-warning').text,
       'The information provided does not match any accounts'
+    )
+  end
+
+  test 'edit user form rendered after sign in' do
+    User.create(name: 'Sample', phone_number: '5551234567')
+    visit root_url
+    click_link('Manage User')
+    assert_selector('#user-signin')
+    fill_in('user[name]', with: 'Sample')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Sign In')
+    assert_selector('#user-edit')
+    assert_no_selector('#user-signin')
+  end
+
+  test 'changes Mange User header after sign in' do
+    User.create(name: 'Sample', phone_number: '5551234567')
+    visit root_url
+    click_link('Manage User')
+    assert_selector('#user-signin')
+    fill_in('user[name]', with: 'Sample')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Sign In')
+    assert_selector('#user-edit')
+    assert_equal(
+      find('#sign-in h3.text-center').text,
+      'Manage your message settings'
+    )
+  end
+
+  test 'renders user settings by default' do
+    user = User.create(name: 'Sample', phone_number: '5551234567',
+                       monday: true, tuesday: false)
+    visit root_url
+    click_link('Manage User')
+    assert_selector('#user-signin')
+    fill_in('user[name]', with: 'Sample')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Sign In')
+    assert_selector('#user-edit')
+    assert_equal(
+      find('#sign-in h3.text-center').text,
+      'Manage your message settings'
+    )
+    assert_equal(find("input[name='user[name]']").value, user.name)
+    assert_equal(find("input[name='user[phone-number]']").value,
+                 user.phone_number)
+    # checkboxes are hidden, so have to check the color of the label
+    assert_equal(
+      find("label[for='monday']").native.css_value('color'),
+      "rgba(51, 51, 51, 1)"
+    )
+    assert_equal(
+      find("label[for='tuesday']").native.css_value('color'),
+      "rgba(187, 187, 187, 1)"
     )
   end
 end

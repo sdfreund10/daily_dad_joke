@@ -3,8 +3,14 @@ window.jQuery = $;
 window.$ = $;
 
 $(document).ready(function() {
+  // hide elements on page load
   let userName;
   let userPhoneNumber;
+  $('.sk-fading-circle').hide();
+  $('#success').hide();
+  $('#user-edit').hide();
+
+  // hand form submissions
   $('#user-signup').submit((event) => {
     $('small.text-danger').text('');
     event.preventDefault();
@@ -20,9 +26,6 @@ $(document).ready(function() {
     }
   });
 
-  $('.sk-fading-circle').hide();
-  $('#success').hide();
-
   function renderSpinner() {
     $('#user-signup').hide();
     $('.sk-fading-circle').show();
@@ -33,6 +36,7 @@ $(document).ready(function() {
     $('#user-signup').show();
   }
 
+  // sign up
   function submitSignUpData () {
     renderSpinner();
     let postData = signUpFormData();
@@ -65,6 +69,7 @@ $(document).ready(function() {
     )
   }
 
+  // sign in
   function submitSignInData () {
     let signInData = {
       authenticity_token: $('#authenticity_token')[0].value,
@@ -74,10 +79,21 @@ $(document).ready(function() {
       }
     };
     $.post('/user_sign_in', signInData).done(function (response){
-      console.log(response)
+      renderUserEditForm(response);
     }).fail(function (response) {
       $('#sign-in-warning')[0].innerText = 'The information provided does not match any accounts';
     });
+  }
+
+  function renderUserEditForm (userData) {
+    $('#user-signin').hide();
+    $('#user-edit').show();
+    $('#sign-in h3.text-center')[0].innerText = 'Manage your message settings';
+    $('#user-edit input[name="user[name]"]')[0].value = userData.name;
+    $('#user-edit input[name="user[phone-number]"]')[0].value = userData.phone_number;
+    $('#user-edit input[type="checkbox"]').map((index,el) => {
+      el.checked = userData[el.id]
+    })
   }
 
 
@@ -89,7 +105,7 @@ $(document).ready(function() {
     }
     return(data)
   }
-
+  // validation
   function validateForm (formSelector) {
     let valid = true;
     if (!validName(formSelector)) {
