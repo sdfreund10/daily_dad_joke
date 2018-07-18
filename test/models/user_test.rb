@@ -1,22 +1,17 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  setup do
+    TwilioClientStub.messages.clear
+  end
+
   def valid_attributes
-    { email: 'test@example.com', phone_number: '5551234567', name: 'Test' }
+    { phone_number: '5551234567', name: 'Test' }
   end
 
   test 'saves user with valid attributes' do
     user = User.new(valid_attributes)
     assert(user.valid?)
-  end
-  test 'users do not save with invalid email' do
-    invlid_format = User.new(valid_attributes.merge(email: 'TEST'))
-    blank_email = User.new(valid_attributes.merge(email: ''))
-    nil_email = User.new(valid_attributes.merge(email: nil))
-
-    assert_not invlid_format.valid?
-    assert_not blank_email.valid?
-    assert_not nil_email.valid?
   end
 
   test 'users do not save with invalid phone number' do
@@ -56,5 +51,20 @@ class UserTest < ActiveSupport::TestCase
     )
     assert spaces.validate
     assert(spaces.phone_number == '5551234567')
+  end
+
+  test 'sends confirmation text after user creation' do
+    user = User.new(valid_attributes)
+    user.save!
+
+    messages = TwilioClientStub.messages
+    assert_equal(messages.length, 1)
+    assert_equal(
+      messages.first.body,
+      "Thanks for signing up for Daily Dad Joke. "\
+      "You should recieve your first message on the next weekday "\
+      "specified during signup :)"
+    )
+    assert_equal(messages.first.to, user.formatted_phone_number)
   end
 end

@@ -36,7 +36,8 @@ class MessageSenderTest < ActiveSupport::TestCase
   end
 
   test 'requests new joke if user has recieved joke already' do
-    user = User.create(phone_number: '1234567890', email: 'example@test.com', name: 'Test')
+    user = User.create(phone_number: '1234567890', name: 'Test')
+    TwilioClientStub.messages.clear # remove user confirmation message
     joke = Joke.create!(api_id: JOKES[0][:id], joke: JOKES[0][:joke])
     UserJokeHistory.create!(joke: joke, user: user)
     stub_joke_api
@@ -52,7 +53,8 @@ class MessageSenderTest < ActiveSupport::TestCase
   end
 
   test 'send message to users who have not recieved joke' do
-    user = User.create(phone_number: '1234567890', email: 'example@test.com', name: 'Test')
+    user = User.create(phone_number: '1234567890', name: 'Test')
+    TwilioClientStub.messages.clear # remove user confirmation message
     stub_joke_api(return_joke_index: 0)
     MessageSender.new([user.id]).call
     assert_equal(TwilioClientStub.messages.length, 1)
@@ -64,9 +66,10 @@ class MessageSenderTest < ActiveSupport::TestCase
 
   test 'send same joke to multiple users if new joke' do
     users = [
-      User.create!(phone_number: '1234567890', email: 'example@test.com', name: 'Test'),
-      User.create!(phone_number: '1234567890', email: 'example2@test.com', name: 'Test')
+      User.create!(phone_number: '1234567890', name: 'Test'),
+      User.create!(phone_number: '0123456789', name: 'Test')
     ]
+    TwilioClientStub.messages.clear # remove user confirmation message
     stub_joke_api
     assert_changes -> { UserJokeHistory.count }, 2 do
       MessageSender.new(users.map(&:id)).call
@@ -81,25 +84,43 @@ class MessageSenderTest < ActiveSupport::TestCase
 
   test 'send different jokes to multiple users' do
     users = [
-      User.create!(phone_number: '1234567890', email: 'example@test.com', name: 'Test'),
-      User.create!(phone_number: '1234567890', email: 'example2@test.com', name: 'Test')
+      User.create!(phone_number: '1234567890', name: 'Test'),
+      User.create!(phone_number: '0123456789', name: 'Test')
     ]
-    JOKES[0..1].each do |joke_params|
-      joke = Joke.create!(api_id: joke_params[:id], joke: joke_params[:joke])
-      UserJokeHistory.create!(user: users.first, joke: joke)
-    end
+    TwilioClientStub.messages.clear # remove user confirmation message
     stub_joke_api
+    setup = Proc.new do
+      UserJokeHistory.delete_all
+      Joke.delete_all
+      JOKES[0..1].each do |joke_params|
+        joke = Joke.create!(api_id: joke_params[:id], joke: joke_params[:joke])
+        UserJokeHistory.create!(user: users.first, joke: joke)
+      end
+    end
+    setup.call
     assert_changes -> { UserJokeHistory.count }, 2 do
       MessageSender.new(users.map(&:id)).call
     end
     assert_equal(UserJokeHistory.count, 4)
     messages = TwilioClientStub.messages
     assert_equal(messages.length, 2)
+    # 1 in 3 chance of the messages being the same, so run again if messages eq
+    # should only fail 1 in 81 runs with the code below (1/3.0**4)
+    if messages.first['body'] == messages.last['body']
+      3.times do
+        TwilioClientStub.messages.clear
+        setup.call
+        MessageSender.new(users.map(&:id)).call
+        break unless messages.first['body'] == messages.last['body']
+      end
+    end
+
     assert_not_equal(messages.first['body'], messages.last['body'])
   end
 
   test 'saves joke history' do
-    user = User.create(phone_number: '1234567890', email: 'example@test.com', name: 'Test')
+    user = User.create(phone_number: '1234567890', name: 'Test')
+    TwilioClientStub.messages.clear # remove user confirmation message
     stub_joke_api
     assert_changes -> { UserJokeHistory.count }, 1 do
       MessageSender.new([user.id]).call
