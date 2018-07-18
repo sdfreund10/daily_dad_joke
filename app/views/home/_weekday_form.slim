@@ -1,24 +1,24 @@
 div.form-group.justify-content-center
   label On what days should we send your joke?
   div.row.form-checkform-check-inline
-    div.col-sm-1.offset-sm-1
-      input#sunday type="checkbox" name="user[sunday]"
-        label.weekday-label for="sunday" S
     div.col-sm-1
-      input#monday type="checkbox" name="user[monday]" checked="true"
-        label.weekday-label for="monday" M
+      input id="#{form}-sunday" type="checkbox" name="user[sunday]"
+        label.weekday-label for="#{form}-sunday" S
     div.col-sm-1
-      input#tuesday type="checkbox" name="user[tuesday]" checked="true"
-        label.weekday-label for="tuesday" T
+      input id="#{form}-monday" type="checkbox" name="user[monday]" checked="true"
+        label.weekday-label for="#{form}-monday" M
     div.col-sm-1
-      input#wednesday type="checkbox" name="user[wednesday]" checked="true"
-        label.weekday-label for="wednesday" W
+      input id="#{form}-tuesday" type="checkbox" name="user[tuesday]" checked="true"
+        label.weekday-label for="#{form}-tuesday" T
     div.col-sm-1
-      input#thursday type="checkbox" name="user[thursday]" checked="true"
-        label.weekday-label for="thursday" R
+      input id="#{form}-wednesday" type="checkbox" name="user[wednesday]" checked="true"
+        label.weekday-label for="#{form}-wednesday" W
     div.col-sm-1
-      input#friday type="checkbox" name="user[friday]" checked="true"
-        label.weekday-label for="friday" F
+      input id="#{form}-thursday" type="checkbox" name="user[thursday]" checked="true"
+        label.weekday-label for="#{form}-thursday" R
     div.col-sm-1
-      input#saturday type="checkbox" name="user[saturday]"
-        label.weekday-label for="saturday" S
+      input id="#{form}-friday" type="checkbox" name="user[friday]" checked="true"
+        label.weekday-label for="#{form}-friday" F
+    div.col-sm-1
+      input id="#{form}-saturday" type="checkbox" name="user[saturday]"
+        label.weekday-label for="#{form}-saturday" S

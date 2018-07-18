@@ -29,7 +29,7 @@ div.container-fluid
                 input.form-control type="tel" name="user[phone-number]" placeholder="1234567890"
                 small.text-danger#phone-warning
               = hidden_field_tag :authenticity_token, form_authenticity_token
-              = render partial: "weekday_form"
+              = render partial: "weekday_form", locals: { form: "user-signup" }
               div.row.justify-content-center
                 input.btn.btn-primary type="submit" name="signUpButton" value="Submit"
           = render partial: "loading_spinner"
@@ -51,27 +51,25 @@ div.container-fluid
                 div.row.justify-content-center
                   input.btn.btn-primary type="submit" name="signInButton" value="Sign In"
               form#user-edit
-                small.text-danger#submission-warning
                 div.form-group
                   label Username
-                  input.form-control type="text" name="user[name]" placeholder="username" readonly="readonly"
+                  input.form-control type="text" name="user[name]" placeholder="username"
+                  small.text-danger#name-warning
                 div.form-group
                   label Phone number
-                  input.form-control type="tel" name="user[phone-number]" readonly="readonly"
-                  small.text-danger#phone-warning
+                  input.form-control type="tel" name="user[phone-number]"
+                  div.row.col-sm-12
+                    small.text-danger#phone-warning
+                  div.row.col-sm-12
+                    small Note: Changing username or email will change login information
                 = hidden_field_tag :authenticity_token, form_authenticity_token
-                = render partial: "weekday_form"
-          / div.justify-content-center#sign-in
-          /   h3.text-center Modify User Settings
-          /   div.form-group
-          /     form#user-settings
-          /       div.form-group
-          /         label Username
-          /         input.form-control type="text" name="user[name]"
-          /       div.form-group
-          /         label Phone number
-          /         input.form-control type="tel" name="user[phone-number]"
-          /       div.row.justify-content-center
-          /         input.btn.btn-primary#submitSettingsButton type="submit" name="submitSettingsButton" value="Submit"
+                = render partial: "weekday_form", locals: { form: "user-edit" }
+                div.row.col-sm-12.justify-content-center
+                  div.row.col-sm-12.text-center
+                    small.text-danger#edit-warning
+                  div.row.col-sm-12.text-center
+                    p.text-success#edit-success Success! Your settings have been updated!
+                div.row.col-sm-12.justify-content-center
+                  input.btn.btn-primary#submitSettingsButton type="submit" value="Submit"
 
 = javascript_pack_tag 'home'
