@@ -12,27 +12,17 @@ $(document).ready(function() {
   $('#user-edit').hide();
 
   // hand form submissions
-  $('#user-signup').submit((event) => {
-    $('small.text-danger').text('');
-    event.preventDefault();
-    if (validateForm('#user-signup')) {
-      submitSignUpData();
-    }
-  });
-
-  $('#user-signin').submit((event) => {
-    event.preventDefault();
-    if (validateForm('#user-signin')) {
-      submitSignInData();
-    }
-  });
-
-  $('#user-edit').submit((event) => {
-    event.preventDefault();
-    if (validateForm('#user-edit')) {
-      submitEditData();
-    }
-  });
+  function handleSubmission (formId, submit) {
+    $(formId).submit((event) => {
+      event.preventDefault();
+      if (validateForm(formId)) {
+        submit();
+      }
+    });
+  }
+  handleSubmission('#user-signup', submitSignUpData)
+  handleSubmission('#user-signin', submitSignInData)
+  handleSubmission('#user-edit', submitEditData)
 
   function renderSpinner() {
     $('#user-signup').hide();
@@ -120,10 +110,12 @@ $(document).ready(function() {
   function submitEditData () {
     let userEditData = {...userData('#user-edit'), ...{find_params: currentUser} };
     $.ajax({ url: '/users', type: 'PATCH', data: userEditData }).done(function (response) {
-      resetWanrings()
+      resetWarnings()
       $('#edit-success').fadeIn('fast').delay(2000).fadeOut('slow');
     }).fail(function (response) {
-      $('#edit-warning')[0].innerText = 'There was a problem updating your settings. Try again later'
+      $('#edit-warning').text(
+        'There was a problem updating your settings. Try again later'
+      )
       throw response;
     });
   }
@@ -132,12 +124,12 @@ $(document).ready(function() {
   function validateForm (formSelector) {
     let valid = true;
     if (!validName(formSelector)) {
-      $(`${formSelector} small#name-warning`)[0].innerText = 'Please enter your username';
+      $(`${formSelector} small#name-warning`).text('Please enter your username');
       valid = false;
     }
 
     if (!validPhone(formSelector)) {
-      $(`${formSelector} small#phone-warning`)[0].innerText = 'Please enter a valid phone number';
+      $(`${formSelector} small#phone-warning`).text('Please enter a valid phone number');
       valid = false;
     }
     return valid;
@@ -157,7 +149,7 @@ $(document).ready(function() {
       $('#submission-warning')[0].innerText = 'That phone number is already taken';
     }
   }
-  function resetWanrings () {
-    $('small.text-danger').each((index, el) => { el.innerText = "" })
+  function resetWarnings () {
+    $('small.text-danger').text('');
   }
 });
