@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import modal from 'bootstrap';
 window.jQuery = $;
 window.$ = $;
 
@@ -10,6 +11,17 @@ $(document).ready(function() {
   $('#success').hide();
   $('#edit-success').hide();
   $('#user-edit').hide();
+  $('#unsubscribe-button').click(() => {
+    if(validateForm('#unsubscribe-form')){
+      $('#unsubscribeModal').modal('show');
+    }
+  })
+
+  $('#delete-user-button').click(() => {
+    if (validateForm('#unsubscribe-form')) {
+      $('#deleteUserModal').modal('show');
+    }
+  })
 
   // hand form submissions
   function handleSubmission (formId, submit) {
@@ -20,9 +32,9 @@ $(document).ready(function() {
       }
     });
   }
-  handleSubmission('#user-signup', submitSignUpData)
-  handleSubmission('#user-signin', submitSignInData)
-  handleSubmission('#user-edit', submitEditData)
+  handleSubmission('#user-signup', submitSignUpData);
+  handleSubmission('#user-signin', submitSignInData);
+  handleSubmission('#user-edit', submitEditData);
 
   function renderSpinner() {
     $('#user-signup').hide();

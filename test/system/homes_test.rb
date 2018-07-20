@@ -2,6 +2,8 @@ require 'application_system_test_case'
 
 class HomesTest < ApplicationSystemTestCase
   include WaitForAjax
+
+  # sign up tests
   test 'sign up form rendered on page load' do
     visit root_url
     assert_selector(:css, '#user-signup')
@@ -90,6 +92,7 @@ class HomesTest < ApplicationSystemTestCase
     assert_equal(monday.native.css_value('color'), initial_monday_color)
   end
 
+  # sign in
   test 'render sign in form when visiting manage user tab' do
     visit root_url
     click_link('Manage User')
@@ -132,6 +135,7 @@ class HomesTest < ApplicationSystemTestCase
     )
   end
 
+  # edit user
   test 'edit user form rendered after sign in' do
     sign_in
     assert_no_selector('#user-signin')
@@ -202,6 +206,80 @@ class HomesTest < ApplicationSystemTestCase
       find('#edit-success').text,
       'Success! Your settings have been updated!'
     )
+  end
+
+  # unsubscribe/delete
+  test 'renders unsubscribe tab' do
+    sign_in
+    click_link('Unsubscribe')
+    assert_selector('div.justify-content-center#unsubscribe')
+    assert_selector('form#unsubscribe-form')
+  end
+
+  test 'validates name prior to delete submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    # submit with blank phone
+    click_button('Delete User')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+
+    # invalid phone number format
+    fill_in('user[phone-number]', with: '12345')
+    click_button('Delete User')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+  end
+
+  test 'validates phone number prior to delete submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    click_button('Delete User')
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+  end
+
+  test 'validates name prior to unsubscribe submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    # submit with blank phone
+    click_button('Stop Messages')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+
+    # invalid phone number format
+    fill_in('user[phone-number]', with: '12345')
+    click_button('Stop Messages')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+  end
+
+  test 'validates phone number prior to unsubscribe submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    click_button('Stop Messages')
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+  end
+
+  test 'render unsubscribe modal on button click' do
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Stop Messages')
+    assert_selector('div.modal.fade#unsubscribeModal')
+    sleep 0.25 # wait for modal to fully render
+    click_button('Keep the Jokes Coming!')
+    assert_no_selector('div.modal.fade#unsubscribeModal')
+  end
+
+  test 'render delete user modal on button click' do
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    assert_selector('div.modal.fade#deleteUserModal')
+    sleep 0.25 # wait for modal to fully render
+    click_button('Keep My User')
+    assert_no_selector('div.modal.fade#deleteUserModal')
   end
 
   # helpers
