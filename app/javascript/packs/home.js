@@ -55,8 +55,7 @@ $(document).ready(function() {
   });
 
   $('div#deleteUserModal button:not([data-dismiss="modal"])').click(()=> {
-    console.log("test");
-    $('#deleteUserModal').modal('hide');
+    deleteUser();
   });
 
   // sign up
@@ -158,6 +157,23 @@ $(document).ready(function() {
       { url: '/users', type: 'PATCH', data: unsubscribeData }
     ).done((response) => {
       $('p#unsubscribe-success').text('You have been unsubscribed');
+      $('p#unsubscribe-success').delay(2000).fadeOut('slow');
+    }).fail((response) => {
+      $('small#unsubscribe-warning').text('User not found');
+    })
+  }
+
+  function deleteUser () {
+    let findData = userLoginData('#unsubscribe-form');
+    let deleteUserData = {
+      authenticity_token: $('#authenticity_token')[0].value,
+      find_params: findData
+    }
+    $('#deleteUserModal').modal('hide');
+    $.ajax(
+      { url: '/users', type: 'DELETE', data: deleteUserData }
+    ).done((response) => {
+      $('p#unsubscribe-success').text('Your user has been deleted');
       $('p#unsubscribe-success').delay(2000).fadeOut('slow');
     }).fail((response) => {
       $('small#unsubscribe-warning').text('User not found');

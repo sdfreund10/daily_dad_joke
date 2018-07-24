@@ -340,13 +340,31 @@ class HomesTest < ApplicationSystemTestCase
     # wait for full render
     sleep 0.5
     click_button('Stop Sending Messages')
-    sleep 0.5
     assert_equal(
       find('#unsubscribe-success').text,
       'You have been unsubscribed'
     )
     # wait for fade
-    sleep 2
+    sleep 1
+    assert_no_selector('#unsubscribe-success')
+  end
+
+  test 'displays delete message after successful delete' do
+    User.create(name: 'Test', phone_number: '5551234567')
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    # wait for full render
+    sleep 0.5
+    click_button('Delete My User')
+    assert_equal(
+      find('#unsubscribe-success').text,
+      'Your user has been deleted'
+    )
+    # wait for fade
+    sleep 1
     assert_no_selector('#unsubscribe-success')
   end
 

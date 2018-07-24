@@ -20,6 +20,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    user = User.find_by(find_params)
+    if user.nil?
+      render plain: "User not found", status: 400
+    else
+      user.destroy!
+      render json: {}, status: 200
+    end
+  end
+
   private
 
   def user_params
