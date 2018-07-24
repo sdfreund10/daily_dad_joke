@@ -11,17 +11,6 @@ $(document).ready(function() {
   $('#success').hide();
   $('#edit-success').hide();
   $('#user-edit').hide();
-  $('#unsubscribe-button').click(() => {
-    if(validateForm('#unsubscribe-form')){
-      $('#unsubscribeModal').modal('show');
-    }
-  })
-
-  $('#delete-user-button').click(() => {
-    if (validateForm('#unsubscribe-form')) {
-      $('#deleteUserModal').modal('show');
-    }
-  })
 
   // hand form submissions
   function handleSubmission (formId, submit) {
@@ -32,6 +21,7 @@ $(document).ready(function() {
       }
     });
   }
+
   handleSubmission('#user-signup', submitSignUpData);
   handleSubmission('#user-signin', submitSignInData);
   handleSubmission('#user-edit', submitEditData);
@@ -45,6 +35,29 @@ $(document).ready(function() {
     $('.sk-fading-circle').hide();
     $('#user-signup').show();
   }
+
+  $('#unsubscribe-button').click(() => {
+    if(validateForm('#unsubscribe-form')){
+      resetWarnings();
+      $('#unsubscribeModal').modal('show');
+    }
+  });
+
+  $('#delete-user-button').click(() => {
+    if (validateForm('#unsubscribe-form')) {
+      resetWarnings();
+      $('#deleteUserModal').modal('show');
+    }
+  });
+
+  $('div#unsubscribeModal button:not([data-dismiss="modal"])').click(()=> {
+    unsubscribeUser();
+  });
+
+  $('div#deleteUserModal button:not([data-dismiss="modal"])').click(()=> {
+    console.log("test");
+    $('#deleteUserModal').modal('hide');
+  });
 
   // sign up
   function submitSignUpData () {
@@ -84,10 +97,7 @@ $(document).ready(function() {
   function submitSignInData () {
     let signInData = {
       authenticity_token: $('#authenticity_token')[0].value,
-      user: {
-        name: $('form#user-signin input[name="user[name]"]')[0].value,
-        phone_number: $('form#user-signin input[name="user[phone-number]"]')[0].value
-      }
+      user: userLoginData('#user-signin')
     };
     $.post('/user_sign_in', signInData).done(function (response){
       renderUserEditForm(response);
@@ -130,6 +140,36 @@ $(document).ready(function() {
       )
       throw response;
     });
+  }
+
+  // unsubscribe and delete
+  function unsubscribeUser () {
+    let findData = userLoginData('#unsubscribe-form');
+    let unsubscribeData = {
+      authenticity_token: $('#authenticity_token')[0].value,
+      find_params: findData,
+      user: {
+        sunday: false, monday: false, tuesday: false, wednesday: false,
+        thursday: false, friday: false, saturday: false
+      }
+    }
+    $('#unsubscribeModal').modal('hide');
+    $.ajax(
+      { url: '/users', type: 'PATCH', data: unsubscribeData }
+    ).done((response) => {
+      $('p#unsubscribe-success').text('You have been unsubscribed');
+      $('p#unsubscribe-success').delay(2000).fadeOut('slow');
+    }).fail((response) => {
+      $('small#unsubscribe-warning').text('User not found');
+    })
+  }
+
+  function userLoginData (formId) {
+    // recieves form id w/ #
+    return({
+      name: $(`form${formId} input[name="user[name]"]`)[0].value,
+      phone_number: $(`form${formId} input[name="user[phone-number]"]`)[0].value
+    })
   }
 
   // validation

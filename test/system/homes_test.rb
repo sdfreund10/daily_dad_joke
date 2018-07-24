@@ -258,7 +258,7 @@ class HomesTest < ApplicationSystemTestCase
     assert_equal(find('#name-warning').text, 'Please enter your username')
   end
 
-  test 'render unsubscribe modal on button click' do
+  test 'render unsubscribe modal on button click and dismisses' do
     visit root_url
     click_link('Unsubscribe')
     fill_in('user[name]', with: 'Test')
@@ -270,7 +270,7 @@ class HomesTest < ApplicationSystemTestCase
     assert_no_selector('div.modal.fade#unsubscribeModal')
   end
 
-  test 'render delete user modal on button click' do
+  test 'render delete user modal on button click and dismisses' do
     visit root_url
     click_link('Unsubscribe')
     fill_in('user[name]', with: 'Test')
@@ -280,6 +280,74 @@ class HomesTest < ApplicationSystemTestCase
     sleep 0.25 # wait for modal to fully render
     click_button('Keep My User')
     assert_no_selector('div.modal.fade#deleteUserModal')
+  end
+
+  test 'renders message when attempting to unsubscribe nonexistant user' do
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Stop Messages')
+    assert_selector('div.modal.fade#unsubscribeModal')
+    sleep 0.25 # wait for modal to fully render
+    click_button('Stop Sending Messages')
+    assert_no_selector('div.modal.fade#unsubscribeModal')
+    assert_equal(
+      find('#unsubscribe-warning').text,
+      'User not found'
+    )
+  end
+
+  test 'renders message when attempting to delete a nonexistant user' do
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    assert_selector('div.modal.fade#deleteUserModal')
+    sleep 0.25 # wait for modal to fully render
+    click_button('Delete My User')
+    assert_no_selector('div.modal.fade#deleteUserModal')
+    assert_equal(
+      find('#unsubscribe-warning').text,
+      'User not found'
+    )
+  end
+
+  test 'resets warning after validation' do
+    visit root_url
+    click_link('Unsubscribe')
+    click_button('Delete User')
+    assert_equal(
+      find('#phone-warning').text, 'Please enter a valid phone number'
+    )
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    click_button('Keep My User')
+    assert_no_selector('#phone-warning')
+    assert_no_selector('#name-warning')
+  end
+
+  test 'displays unsubscribed message after successful unsubscribe' do
+    User.create(name: 'Test', phone_number: '5551234567')
+    visit root_url
+    click_link('Unsubscribe')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Stop Messages')
+    # wait for full render
+    sleep 0.5
+    click_button('Stop Sending Messages')
+    sleep 0.5
+    assert_equal(
+      find('#unsubscribe-success').text,
+      'You have been unsubscribed'
+    )
+    # wait for fade
+    sleep 2
+    assert_no_selector('#unsubscribe-success')
   end
 
   # helpers

@@ -86,6 +86,11 @@ div.container-fluid
                   label Phone number
                   input.form-control type="tel" name="user[phone-number]" placeholder="1234567890"
                   small.text-danger#phone-warning
+                div.row.col-sm-12.justify-content-center
+                  div.row.col-sm-12.text-center
+                    small.text-danger#unsubscribe-warning
+                  div.row.col-sm-12.text-center
+                    p.text-success#unsubscribe-success
                 div.row
                   div.col-sm-6
                     button.btn.btn-primary.float-left#unsubscribe-button type="button" Stop Messages
@@ -112,6 +117,6 @@ div.modal.fade#deleteUserModal tabindex="-1" role="dialog" aria-hidden="true"
         div.col-sm-6
           button.btn.btn-primary.float-left type="button" data-dismiss="modal" Keep My User
         div.col-sm-6
-          button.btn.btn-danger.float-right type="button" Delete User
+          button.btn.btn-danger.float-right type="button" Delete My User
 
 = javascript_pack_tag 'home'
