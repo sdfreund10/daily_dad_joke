@@ -5,11 +5,13 @@ div.container-fluid
     h2 Sign up to recieve a new joke every morning.
   div.row
     div.col-sm-4.offset-sm-4
-      ul.nav.nav-pills.mb-3#pills-tab role="tablist"
+      ul.nav.nav-pills.nav-justified.mb-3#pills-tab role="tablist"
         li.nav-item
           a.nav-link.active#sign-up-tab data-toggle="pill" href="#sign-up" role="tab" aria-controls="sign-up" aria-selected="true" Sign Up!
         li.nav-item
           a.nav-link.pills-manage-user-tab data-toggle="pill" href="#pills-manage-user" role="tab" aria-controls="pills-manage-user" aria-selected="false" Manage User
+        li.nav-item
+          a.nav-link.pills-unsubscribe-tab data-toggle="pill" href="#pills-unsubscribe" role="tab" aria-controls="pills-unsubscribe" aria-selected="false" Unsubscribe
       div.tab-content#pills-tabContent
         div.tab-pane.fade.show.active#sign-up role="tabpanel" aria-labelledby="sign-up-tab"
           div.form-group
@@ -71,5 +73,50 @@ div.container-fluid
                     p.text-success#edit-success Success! Your settings have been updated!
                 div.row.col-sm-12.justify-content-center
                   input.btn.btn-primary#submitSettingsButton type="submit" value="Submit"
+        div.tab-pane.fade#pills-unsubscribe role="tabpanel" aria-labelledby="pills-unsubscribe-tab"
+          div.justify-content-center#unsubscribe
+            h3.text-center Enter information below to unsubscribe or delete user
+            div.form-group
+              form#unsubscribe-form
+                div.form-group
+                  label Username
+                  input.form-control type="text" name="user[name]" placeholder="username"
+                  small.text-danger#name-warning
+                div.form-group
+                  label Phone number
+                  input.form-control type="tel" name="user[phone-number]" placeholder="1234567890"
+                  small.text-danger#phone-warning
+                div.row.col-sm-12.justify-content-center
+                  div.row.col-sm-12.text-center
+                    small.text-danger#unsubscribe-warning
+                  div.row.col-sm-12.text-center
+                    p.text-success#unsubscribe-success
+                div.row
+                  div.col-sm-6
+                    button.btn.btn-primary.float-left#unsubscribe-button type="button" Stop Messages
+                  div.col-sm-6
+                    button.btn.btn-danger.float-right#delete-user-button type="button" Delete User
+div.modal.fade#unsubscribeModal tabindex="-1" role="dialog" aria-hidden="true"
+  div.modal-dialog.modal-dialog-centered role="document"
+    div.modal-content
+      div.modal-header
+        h5.modal-title Are You Sure?
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+      div.modal-footer
+        div.col-sm-6
+          button.btn.btn-primary.float-left type="button" data-dismiss="modal" Keep the Jokes Coming!
+        div.col-sm-6
+          button.btn.btn-danger.float-right type="button" Stop Sending Messages
+div.modal.fade#deleteUserModal tabindex="-1" role="dialog" aria-hidden="true"
+  div.modal-dialog.modal-dialog-centered role="document"
+    div.modal-content
+      div.modal-header
+        h5.modal-title Are you sure?
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+      div.modal-footer
+        div.col-sm-6
+          button.btn.btn-primary.float-left type="button" data-dismiss="modal" Keep My User
+        div.col-sm-6
+          button.btn.btn-danger.float-right type="button" Delete My User
 
 = javascript_pack_tag 'home'

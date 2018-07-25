@@ -80,4 +80,25 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     user.reload
     assert_equal("New Name", user.name)
   end
+
+  test "destroy deletes users by find_params" do
+    user = User.create(name: "Test", phone_number: "0123456789")
+    request = { params: {
+      find_params: { name: "Test", phone_number: "0123456789" }
+    } }
+    assert_changes(-> { User.count }, 1) { delete users_url, request }
+    assert_response 200
+  end
+
+  test "destroy render no user found if find params not valid" do
+    request = { params: {
+      find_params: { name: "Test", phone_number: "0123456789" }
+    } }
+    assert_no_changes(-> { User.count }) { delete users_url, request }
+    assert_response 400
+    assert_equal(
+      response.body,
+      "User not found"
+    )
+  end
 end

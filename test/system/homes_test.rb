@@ -2,6 +2,9 @@ require 'application_system_test_case'
 
 class HomesTest < ApplicationSystemTestCase
   include WaitForAjax
+  driven_by :headless_chrome
+
+  # sign up tests
   test 'sign up form rendered on page load' do
     visit root_url
     assert_selector(:css, '#user-signup')
@@ -90,6 +93,7 @@ class HomesTest < ApplicationSystemTestCase
     assert_equal(monday.native.css_value('color'), initial_monday_color)
   end
 
+  # sign in
   test 'render sign in form when visiting manage user tab' do
     visit root_url
     click_link('Manage User')
@@ -132,6 +136,7 @@ class HomesTest < ApplicationSystemTestCase
     )
   end
 
+  # edit user
   test 'edit user form rendered after sign in' do
     sign_in
     assert_no_selector('#user-signin')
@@ -204,12 +209,185 @@ class HomesTest < ApplicationSystemTestCase
     )
   end
 
+  # unsubscribe/delete
+  test 'renders unsubscribe tab' do
+    sign_in
+    click_link('Unsubscribe')
+    sleep 0.1
+    assert_selector('div.justify-content-center#unsubscribe')
+    assert_selector('form#unsubscribe-form')
+  end
+
+  test 'validates name prior to delete submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    # submit with blank phone
+    click_button('Delete User')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+
+    # invalid phone number format
+    fill_in('user[phone-number]', with: '12345')
+    click_button('Delete User')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+  end
+
+  test 'validates phone number prior to delete submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    click_button('Delete User')
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+  end
+
+  test 'validates name prior to unsubscribe submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    # submit with blank phone
+    click_button('Stop Messages')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+
+    # invalid phone number format
+    fill_in('user[phone-number]', with: '12345')
+    click_button('Stop Messages')
+    assert_equal(find('#phone-warning').text, 'Please enter a valid phone number')
+  end
+
+  test 'validates phone number prior to unsubscribe submission' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    click_button('Stop Messages')
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+  end
+
+  test 'render unsubscribe modal on button click and dismisses' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Stop Messages')
+    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']", wait: 1)
+    sleep 0.25 # wait for modal to fully render
+    find(:xpath, "//button[text() = 'Keep the Jokes Coming!']").click
+    assert_no_selector(:xpath, "//div[@id = 'unsubscribeModal']")
+  end
+
+  test 'render delete user modal on button click and dismisses' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    assert_selector(:xpath, "//div[@id = 'deleteUserModal']", wait: 1)
+    sleep 0.25 # wait for modal to fully render
+    find(:xpath, "//button[text() = 'Keep My User']").click
+    assert_no_selector(:xpath, "//div[@id = 'deleteUserModal']")
+  end
+
+  test 'renders message when attempting to unsubscribe nonexistant user' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Stop Messages')
+    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']", wait: 1)
+    sleep 0.25 # wait for modal to fully render
+    find(:xpath, "//button[text() = 'Stop Sending Messages']").click
+    assert_no_selector(:xpath, "//div[@id = 'unsubscribeModal']")
+    assert_equal(
+      find('#unsubscribe-warning').text,
+      'User not found'
+    )
+  end
+
+  test 'renders message when attempting to delete a nonexistant user' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    assert_selector(:xpath, "//div[@id = 'deleteUserModal']", wait: 1)
+    sleep 0.25 # wait for modal to fully render
+    find(:xpath, "//button[text() = 'Delete My User']").click
+    assert_no_selector(:xpath, "//div[@id = 'deleteUserModal']")
+    assert_equal(
+      find('#unsubscribe-warning').text,
+      'User not found'
+    )
+  end
+
+  test 'resets warning after validation' do
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    click_button('Delete User')
+    assert_equal(
+      find('#phone-warning').text, 'Please enter a valid phone number'
+    )
+    assert_equal(find('#name-warning').text, 'Please enter your username')
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    find(:xpath, "//button[text() = 'Keep My User']").click
+    assert_no_selector('#phone-warning')
+    assert_no_selector('#name-warning')
+  end
+
+  test 'displays unsubscribed message after successful unsubscribe' do
+    User.create(name: 'Test', phone_number: '5551234567')
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Stop Messages')
+    # wait for full render
+    sleep 0.5
+    find(:xpath, "//button[text() = 'Stop Sending Messages']").click
+    assert_equal(
+      find('#unsubscribe-success').text,
+      'You have been unsubscribed'
+    )
+    # wait for fade
+    sleep 1
+    assert_no_selector('#unsubscribe-success')
+  end
+
+  test 'displays delete message after successful delete' do
+    User.create(name: 'Test', phone_number: '5551234567')
+    visit root_url
+    click_link('Unsubscribe')
+    sleep 0.1
+    fill_in('user[name]', with: 'Test')
+    fill_in('user[phone-number]', with: '5551234567')
+    click_button('Delete User')
+    # wait for full render
+    sleep 0.5
+    find(:xpath, "//button[text() = 'Delete My User']").click
+    assert_equal(
+      find('#unsubscribe-success').text,
+      'Your user has been deleted'
+    )
+    # wait for fade
+    sleep 1
+    assert_no_selector('#unsubscribe-success')
+  end
+
   # helpers
   def sign_in
     User.create(name: 'Sample', phone_number: '5551234567',
                 monday: true, tuesday: false)
     visit root_url
     click_link('Manage User')
+    sleep 0.1
     assert_selector('#user-signin')
     fill_in('user[name]', with: 'Sample')
     fill_in('user[phone-number]', with: '5551234567')

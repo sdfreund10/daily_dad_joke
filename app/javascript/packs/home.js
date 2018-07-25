@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import modal from 'bootstrap';
 window.jQuery = $;
 window.$ = $;
 
@@ -20,9 +21,10 @@ $(document).ready(function() {
       }
     });
   }
-  handleSubmission('#user-signup', submitSignUpData)
-  handleSubmission('#user-signin', submitSignInData)
-  handleSubmission('#user-edit', submitEditData)
+
+  handleSubmission('#user-signup', submitSignUpData);
+  handleSubmission('#user-signin', submitSignInData);
+  handleSubmission('#user-edit', submitEditData);
 
   function renderSpinner() {
     $('#user-signup').hide();
@@ -33,6 +35,29 @@ $(document).ready(function() {
     $('.sk-fading-circle').hide();
     $('#user-signup').show();
   }
+
+  $('#unsubscribe-button').click(() => {
+    renderModal('#unsubscribeModal')
+  });
+
+  $('#delete-user-button').click(() => {
+    renderModal('#deleteUserModal')
+  });
+
+  function renderModal(modalId) {
+    if (validateForm('#unsubscribe-form')) {
+      resetWarnings();
+      $(modalId).modal('show');
+    }
+  }
+
+  $('div#unsubscribeModal button:not([data-dismiss="modal"])').click(()=> {
+    unsubscribeUser();
+  });
+
+  $('div#deleteUserModal button:not([data-dismiss="modal"])').click(()=> {
+    deleteUser();
+  });
 
   // sign up
   function submitSignUpData () {
@@ -72,10 +97,7 @@ $(document).ready(function() {
   function submitSignInData () {
     let signInData = {
       authenticity_token: $('#authenticity_token')[0].value,
-      user: {
-        name: $('form#user-signin input[name="user[name]"]')[0].value,
-        phone_number: $('form#user-signin input[name="user[phone-number]"]')[0].value
-      }
+      user: userLoginData('#user-signin')
     };
     $.post('/user_sign_in', signInData).done(function (response){
       renderUserEditForm(response);
@@ -118,6 +140,56 @@ $(document).ready(function() {
       )
       throw response;
     });
+  }
+
+  // unsubscribe and delete
+  function unsubscribeUser () {
+    let findData = userLoginData('#unsubscribe-form');
+    let unsubscribeData = {
+      authenticity_token: $('#authenticity_token')[0].value,
+      find_params: findData,
+      user: {
+        sunday: false, monday: false, tuesday: false, wednesday: false,
+        thursday: false, friday: false, saturday: false
+      }
+    }
+    $('#unsubscribeModal').modal('hide');
+    submitUnsubscribe(
+      { url: '/users', type: 'PATCH', data: unsubscribeData },
+      'You have been unsubscribed'
+    )
+  }
+
+  function deleteUser () {
+    let findData = userLoginData('#unsubscribe-form');
+    let deleteUserData = {
+      authenticity_token: $('#authenticity_token')[0].value,
+      find_params: findData
+    }
+    $('#deleteUserModal').modal('hide');
+
+    submitUnsubscribe(
+      { url: '/users', type: 'DELETE', data: deleteUserData },
+      'Your user has been deleted'
+    )
+  }
+
+  function submitUnsubscribe (ajaxParams, message) {
+    $.ajax(
+      ajaxParams
+    ).done((response) => {
+      $('p#unsubscribe-success').text(message).delay(2000).fadeOut('slow');
+    }).fail((response) => {
+      $('small#unsubscribe-warning').text('User not found');
+    })
+  }
+
+  function userLoginData (formId) {
+    // recieves form id w/ #
+    return({
+      name: $(`form${formId} input[name="user[name]"]`)[0].value,
+      phone_number: $(`form${formId} input[name="user[phone-number]"]`)[0].value
+    })
   }
 
   // validation
