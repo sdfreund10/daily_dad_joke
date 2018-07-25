@@ -264,10 +264,10 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
-    assert_selector('div.modal.fade#unsubscribeModal')
+    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']")
     sleep 0.25 # wait for modal to fully render
-    click_button('Keep the Jokes Coming!')
-    assert_no_selector('div.modal.fade#unsubscribeModal')
+    find(:xpath, "//button[text() = 'Keep the Jokes Coming!']").click
+    assert_no_selector(:xpath, "//div[@id = 'unsubscribeModal']")
   end
 
   test 'render delete user modal on button click and dismisses' do
@@ -276,10 +276,10 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
-    assert_selector('div.modal.fade#deleteUserModal')
+    assert_selector(:xpath, "//div[@id = 'deleteUserModal']")
     sleep 0.25 # wait for modal to fully render
-    click_button('Keep My User')
-    assert_no_selector('div.modal.fade#deleteUserModal')
+    find(:xpath, "//button[text() = 'Keep My User']").click
+    assert_no_selector(:xpath, "//div[@id = 'deleteUserModal']")
   end
 
   test 'renders message when attempting to unsubscribe nonexistant user' do
@@ -288,10 +288,10 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
-    assert_selector('div.modal.fade#unsubscribeModal')
+    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']")
     sleep 0.25 # wait for modal to fully render
-    click_button('Stop Sending Messages')
-    assert_no_selector('div.modal.fade#unsubscribeModal')
+    find(:xpath, "//button[text() = 'Stop Sending Messages']").click
+    assert_no_selector(:xpath, "//div[@id = 'unsubscribeModal']")
     assert_equal(
       find('#unsubscribe-warning').text,
       'User not found'
@@ -304,10 +304,10 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
-    assert_selector('div.modal.fade#deleteUserModal')
+    assert_selector(:xpath, "//div[@id = 'deleteUserModal']")
     sleep 0.25 # wait for modal to fully render
-    click_button('Delete My User')
-    assert_no_selector('div.modal.fade#deleteUserModal')
+    find(:xpath, "//button[text() = 'Delete My User']").click
+    assert_no_selector(:xpath, "//div[@id = 'deleteUserModal']")
     assert_equal(
       find('#unsubscribe-warning').text,
       'User not found'
@@ -325,7 +325,7 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
-    click_button('Keep My User')
+    find(:xpath, "//button[text() = 'Keep My User']").click
     assert_no_selector('#phone-warning')
     assert_no_selector('#name-warning')
   end
@@ -339,7 +339,7 @@ class HomesTest < ApplicationSystemTestCase
     click_button('Stop Messages')
     # wait for full render
     sleep 0.5
-    click_button('Stop Sending Messages')
+    find(:xpath, "//button[text() = 'Stop Sending Messages']").click
     assert_equal(
       find('#unsubscribe-success').text,
       'You have been unsubscribed'
@@ -358,7 +358,7 @@ class HomesTest < ApplicationSystemTestCase
     click_button('Delete User')
     # wait for full render
     sleep 0.5
-    click_button('Delete My User')
+    find(:xpath, "//button[text() = 'Delete My User']").click
     assert_equal(
       find('#unsubscribe-success').text,
       'Your user has been deleted'
