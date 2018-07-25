@@ -264,7 +264,7 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
-    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']")
+    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']", wait: 1)
     sleep 0.25 # wait for modal to fully render
     find(:xpath, "//button[text() = 'Keep the Jokes Coming!']").click
     assert_no_selector(:xpath, "//div[@id = 'unsubscribeModal']")
@@ -276,7 +276,7 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
-    assert_selector(:xpath, "//div[@id = 'deleteUserModal']")
+    assert_selector(:xpath, "//div[@id = 'deleteUserModal']", wait: 1)
     sleep 0.25 # wait for modal to fully render
     find(:xpath, "//button[text() = 'Keep My User']").click
     assert_no_selector(:xpath, "//div[@id = 'deleteUserModal']")
@@ -288,7 +288,7 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
-    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']")
+    assert_selector(:xpath, "//div[@id = 'unsubscribeModal']", wait: 1)
     sleep 0.25 # wait for modal to fully render
     find(:xpath, "//button[text() = 'Stop Sending Messages']").click
     assert_no_selector(:xpath, "//div[@id = 'unsubscribeModal']")
@@ -304,7 +304,7 @@ class HomesTest < ApplicationSystemTestCase
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
-    assert_selector(:xpath, "//div[@id = 'deleteUserModal']")
+    assert_selector(:xpath, "//div[@id = 'deleteUserModal']", wait: 1)
     sleep 0.25 # wait for modal to fully render
     find(:xpath, "//button[text() = 'Delete My User']").click
     assert_no_selector(:xpath, "//div[@id = 'deleteUserModal']")
