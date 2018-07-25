@@ -2,6 +2,7 @@ require 'application_system_test_case'
 
 class HomesTest < ApplicationSystemTestCase
   include WaitForAjax
+  driven_by :headless_chrome
 
   # sign up tests
   test 'sign up form rendered on page load' do
@@ -212,6 +213,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'renders unsubscribe tab' do
     sign_in
     click_link('Unsubscribe')
+    sleep 0.1
     assert_selector('div.justify-content-center#unsubscribe')
     assert_selector('form#unsubscribe-form')
   end
@@ -219,6 +221,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'validates name prior to delete submission' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     # submit with blank phone
     click_button('Delete User')
@@ -233,6 +236,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'validates phone number prior to delete submission' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     click_button('Delete User')
     assert_equal(find('#name-warning').text, 'Please enter your username')
   end
@@ -240,6 +244,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'validates name prior to unsubscribe submission' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     # submit with blank phone
     click_button('Stop Messages')
@@ -254,6 +259,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'validates phone number prior to unsubscribe submission' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     click_button('Stop Messages')
     assert_equal(find('#name-warning').text, 'Please enter your username')
   end
@@ -261,6 +267,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'render unsubscribe modal on button click and dismisses' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
@@ -273,6 +280,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'render delete user modal on button click and dismisses' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
@@ -285,6 +293,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'renders message when attempting to unsubscribe nonexistant user' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
@@ -301,6 +310,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'renders message when attempting to delete a nonexistant user' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
@@ -317,6 +327,7 @@ class HomesTest < ApplicationSystemTestCase
   test 'resets warning after validation' do
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     click_button('Delete User')
     assert_equal(
       find('#phone-warning').text, 'Please enter a valid phone number'
@@ -334,6 +345,7 @@ class HomesTest < ApplicationSystemTestCase
     User.create(name: 'Test', phone_number: '5551234567')
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Stop Messages')
@@ -353,6 +365,7 @@ class HomesTest < ApplicationSystemTestCase
     User.create(name: 'Test', phone_number: '5551234567')
     visit root_url
     click_link('Unsubscribe')
+    sleep 0.1
     fill_in('user[name]', with: 'Test')
     fill_in('user[phone-number]', with: '5551234567')
     click_button('Delete User')
@@ -374,6 +387,7 @@ class HomesTest < ApplicationSystemTestCase
                 monday: true, tuesday: false)
     visit root_url
     click_link('Manage User')
+    sleep 0.1
     assert_selector('#user-signin')
     fill_in('user[name]', with: 'Sample')
     fill_in('user[phone-number]', with: '5551234567')
