@@ -37,18 +37,19 @@ $(document).ready(function() {
   }
 
   $('#unsubscribe-button').click(() => {
-    if(validateForm('#unsubscribe-form')){
-      resetWarnings();
-      $('#unsubscribeModal').modal('show');
-    }
+    renderModal('#unsubscribeModal')
   });
 
   $('#delete-user-button').click(() => {
+    renderModal('#deleteUserModal')
+  });
+
+  function renderModal(modalId) {
     if (validateForm('#unsubscribe-form')) {
       resetWarnings();
-      $('#deleteUserModal').modal('show');
+      $(modalId).modal('show');
     }
-  });
+  }
 
   $('div#unsubscribeModal button:not([data-dismiss="modal"])').click(()=> {
     unsubscribeUser();
@@ -153,14 +154,10 @@ $(document).ready(function() {
       }
     }
     $('#unsubscribeModal').modal('hide');
-    $.ajax(
-      { url: '/users', type: 'PATCH', data: unsubscribeData }
-    ).done((response) => {
-      $('p#unsubscribe-success').text('You have been unsubscribed');
-      $('p#unsubscribe-success').delay(2000).fadeOut('slow');
-    }).fail((response) => {
-      $('small#unsubscribe-warning').text('User not found');
-    })
+    submitUnsubscribe(
+      { url: '/users', type: 'PATCH', data: unsubscribeData },
+      'You have been unsubscribed'
+    )
   }
 
   function deleteUser () {
@@ -170,11 +167,18 @@ $(document).ready(function() {
       find_params: findData
     }
     $('#deleteUserModal').modal('hide');
+
+    submitUnsubscribe(
+      { url: '/users', type: 'DELETE', data: deleteUserData },
+      'Your user has been deleted'
+    )
+  }
+
+  function submitUnsubscribe (ajaxParams, message) {
     $.ajax(
-      { url: '/users', type: 'DELETE', data: deleteUserData }
+      ajaxParams
     ).done((response) => {
-      $('p#unsubscribe-success').text('Your user has been deleted');
-      $('p#unsubscribe-success').delay(2000).fadeOut('slow');
+      $('p#unsubscribe-success').text(message).delay(2000).fadeOut('slow');
     }).fail((response) => {
       $('small#unsubscribe-warning').text('User not found');
     })
